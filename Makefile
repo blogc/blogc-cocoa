@@ -6,7 +6,6 @@ SITE_TITLE = "Site Title"
 SITE_TAGLINE = "Site Tagline"
 LOCALE = "en_US.utf-8"
 
-POSTS_PER_PAGE = 10
 POSTS_PER_PAGE_ATOM = 10
 
 POSTS = \
@@ -59,13 +58,6 @@ BLOGC_COMMAND = \
 POSTS_LIST = $(addprefix content/post/, $(addsuffix .txt, $(POSTS)))
 PAGES_LIST = $(addprefix content/, $(addsuffix .txt, $(PAGES)))
 
-LAST_PAGE = $(shell $(BLOGC_COMMAND) \
-	-D FILTER_PAGE=1 \
-	-D FILTER_PER_PAGE=$(POSTS_PER_PAGE) \
-	-p LAST_PAGE \
-	-l \
-	$(POSTS_LIST))
-
 ALL_LIST = \
 	$(POSTS_LIST) \
 	$(PAGES_LIST) \
@@ -81,26 +73,10 @@ all: \
 	$(addprefix $(OUTPUT_DIR)/, $(ASSETS)) \
 	$(addprefix $(OUTPUT_DIR)/post/, $(addsuffix /index.html, $(POSTS))) \
 	$(addprefix $(OUTPUT_DIR)/, $(addsuffix /index.html, $(PAGES))) \
-	$(addprefix $(OUTPUT_DIR)/page/, $(addsuffix /index.html, \
-		$(shell for i in $(shell seq 1 $(LAST_PAGE)); do echo $$i; done)))
 
 $(OUTPUT_DIR)/index.html: $(POSTS_LIST) templates/main.tmpl Makefile
 	$(BLOGC_COMMAND) \
 		-D DATE_FORMAT=$(DATE_FORMAT) \
-		-D FILTER_PAGE=1 \
-		-D FILTER_PER_PAGE=$(POSTS_PER_PAGE) \
-		-D MENU=blog \
-		-l \
-		-o $@ \
-		-t templates/main.tmpl \
-		$(POSTS_LIST)
-
-$(OUTPUT_DIR)/page/%/index.html: $(POSTS_LIST) templates/main.tmpl Makefile
-	$(BLOGC_COMMAND) \
-		-D DATE_FORMAT=$(DATE_FORMAT) \
-		-D FILTER_PAGE=$(shell echo $@ | sed -e 's,^$(OUTPUT_DIR)/page/,,' -e 's,/index\.html$$,,')\
-		-D FILTER_PER_PAGE=$(POSTS_PER_PAGE) \
-		-D MENU=blog \
 		-l \
 		-o $@ \
 		-t templates/main.tmpl \
@@ -118,15 +94,11 @@ $(OUTPUT_DIR)/atom.xml: $(POSTS_LIST) templates/atom.tmpl Makefile
 
 IS_POST = 0
 
-$(OUTPUT_DIR)/about/index.html: MENU = about
-
-$(OUTPUT_DIR)/post/%/index.html: MENU = blog
 $(OUTPUT_DIR)/post/%/index.html: IS_POST = 1
 
 $(OUTPUT_DIR)/%/index.html: content/%.txt templates/main.tmpl Makefile
 	$(BLOGC_COMMAND) \
 		-D DATE_FORMAT=$(DATE_FORMAT) \
-		-D MENU=$(MENU) \
 		$(shell test "$(IS_POST)" -eq 1 && echo -D IS_POST=1) \
 		-o $@ \
 		-t templates/main.tmpl \
