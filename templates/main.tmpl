@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_TAGLINE }}">
+    <title>{% block entry %}{{ TITLE }}{% endblock %}{% block listing_once %}{{ SITE_TITLE }}{% endblock %}</title>
+    <link href="{{ BASE_URL }}/assets/reset.css" rel="stylesheet" type="text/css">
+    <link href="{{ BASE_URL }}/assets/main.css" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+      <script src="//cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+    <link href="{{ BASE_URL }}/atom.xml" rel="alternate" type="application/atom+xml" title="{{ SITE_TITLE }}" />
+  </head>
+  <body>
+    <section class="header"> 
+      <div class="container">
+        <div class="content">
+          <a href="{{ BASE_URL }}/"><div class="name">{{ SITE_TITLE }}</div></a>
+          <nav>
+            <ul>
+              <a href="{{ BASE_URL }}/"><li>Blog</li></a>
+              <a href="{{ BASE_URL }}/about/"><li>About</li></a>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </section>
+    <section class="icons">
+      <div class="container">
+        <div class="content">
+          {% ifdef AUTHOR_GITHUB %}
+          <a href="https://github.com/{{ AUTHOR_GITHUB }}" target="_blank">
+            <i class="icon ion-social-github"></i>
+          </a>
+          {% endif %}
+          {% ifdef AUTHOR_TWITTER %}
+          <a href="https://twitter.com/{{ AUTHOR_TWITTER }}" target="_blank">
+            <i class="icon ion-social-twitter"></i>
+          </a>
+          {% endif %}
+          {% ifdef AUTHOR_LINKEDIN %}
+          <a href="https://www.linkedin.com/in/{{ AUTHOR_LINKEDIN }}" target="_blank">
+            <i class="icon ion-social-linkedin"></i>
+          </a>
+          {% endif %}
+          {% ifdef AUTHOR_FACEBOOK %}
+          <a href="https://www.facebook.com/{{ AUTHOR_FACEBOOK }}" target="_blank">
+            <i class="icon ion-social-facebook larger"></i>
+          </a>
+          {% endif %}
+          {% ifdef AUTHOR_EMAIL %}
+          <a href="mailto:{{ AUTHOR_EMAIL }}">
+            <i class="icon ion-ios-email larger"></i>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+    {% block listing_once %}
+    <section class="main">
+      <div class="container">
+        <div class="content">
+          <div class="page-heading">Blog</div>
+          <ul>
+    {% endblock %}
+    {% block listing %}
+            <li class="post-item">
+              <div class="meta">{{ DATE_FORMATTED }}</div>
+              <a href="{{ BASE_URL }}/post/{{ FILENAME }}/"><div>{{ TITLE }}</div></a>
+            </li>
+    {% endblock %}
+    {% block listing_once %}
+          </ul>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+    {% block entry %}
+    <section class="main{% ifdef IS_POST %} post non-narrow zero-top-spacing{% endif %}">
+      <div class="container">
+        <div class="content">
+          {% ifdef IS_POST %}<div class="front-matter">{% endif %}
+            <div class="title-container">
+              <div class="page-heading">{{ TITLE }}</div>
+            </div>
+          {% ifdef IS_POST %}
+            <div class="meta">
+              <div class="date">{{ DATE_FORMATTED }}</div>
+            </div>
+          </div>
+          {% endif %}
+          <div class="markdown">
+            {{ CONTENT }}
+            {% ifdef IS_POST %}
+            <br>
+            <p><a href="{{ BASE_URL }}/">Back to posts</a></p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock %}
+  </body>
+</html>
