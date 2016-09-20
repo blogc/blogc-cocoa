@@ -72,7 +72,7 @@ all: \
 	$(OUTPUT_DIR)/atom.xml \
 	$(addprefix $(OUTPUT_DIR)/, $(ASSETS)) \
 	$(addprefix $(OUTPUT_DIR)/post/, $(addsuffix /index.html, $(POSTS))) \
-	$(addprefix $(OUTPUT_DIR)/, $(addsuffix /index.html, $(PAGES))) \
+	$(addprefix $(OUTPUT_DIR)/, $(addsuffix /index.html, $(PAGES)))
 
 $(OUTPUT_DIR)/index.html: $(POSTS_LIST) templates/main.tmpl Makefile
 	$(BLOGC_COMMAND) \
